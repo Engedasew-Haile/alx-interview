@@ -4,17 +4,18 @@ n number of locked boxes in front of you. Each box is numbered sequentially
 from 0 to n - 1 and each box may contain keys to the other boxes.
 a method that determines if all the boxes can be opened.
 """
+
 """
 def canUnlockAll(boxes):
 
-    if (type(boxes) is not list):       # not in the list iii
-        return False
+    if (type(boxes) is not list):
+        return False    # box not in the this will return fales 
 
     if (len(boxes) == 0):
-        return False
+        return False    # box length equal to null return 0
 
     keys = [0]
-    for i in keys:
+    for i in keys:      # boxs determined all will opend
         for j in boxes[i]:
             if j not in keys and j != i and j < len(boxes) and j != 0:
                 keys.append(j)
@@ -22,39 +23,65 @@ def canUnlockAll(boxes):
         return True
     else:
         return False
-        """
-
-""" Lockboxes   => start here
-
-This module provides a function for checking if all the boxes in a list
-of lockboxes can be unlocked, given that the first box is unlocked.
-"""
-
-
+    """
 def canUnlockAll(boxes):
-    '''
-    Checks if all the lockboxes can be unlocked.
+    """checks if all boxes are reachable."""
+    if (not isinstance(boxes, list)):
+        return False
 
-    Args:
-        boxes (list of lists): A list of lockboxes where each box contains
-                              keys (indices) to other boxes.
+    seen = [False for _ in range(len(boxes))]
+    seen[0] = True
 
-    Returns:
-        bool: True if all lockboxes can be unlocked, False otherwise.
-    '''
-    num_boxes = len(boxes)
-    seen_boxes = set([0])
-    unseen_boxes = set(boxes[0]).difference(set([0]))
+    # useDFS(boxes, seen, 0)
+    useBFS(boxes, seen)
 
-    while len(unseen_boxes) > 0:
-        box_index = unseen_boxes.pop()
+    # the `seen` array tracks all the visited nodes. we can then see which
+    # nodes were unvisited by inspecting for False values. However, for this
+    # task we only need to know if any node was unreached, which is easier.
+    return all(seen)
 
-        # Ensure box_index is within valid bounds
-        if not (0 <= box_index < num_boxes):
+
+def useBFS(boxes, seen):
+    """uses iteration to visit nodes breadth-first
+        and populate the seen array as each new node is visited.
+    """
+    for i, box in enumerate(boxes):
+        if (isinstance(box, list) is not True):
             continue
 
-        if box_index not in seen_boxes:
-            unseen_boxes = unseen_boxes.union(boxes[box_index])
-            seen_boxes.add(box_index)
+        for key in box:
+            if (isinstance(key, int) is not True):
+                continue
 
-    return num_boxes == len(seen_boxes)
+            # guard against out-of-bounds array access
+            if (key >= len(boxes)):
+                continue
+
+            if (i == key):
+                continue
+
+            seen[key] = True
+
+
+def useDFS(boxes, seen, currentBoxIdx):
+    """uses recursion to visit nodes depth-first
+        and populate the seen array as each new node is visited.
+    """
+    currentBox = boxes[currentBoxIdx]
+
+    if (isinstance(currentBox, list) is not True):
+        return
+
+    for key in currentBox:
+        if (isinstance(key, int) is not True):
+            continue
+
+        # guard against out-of-bounds array access
+        if (key >= len(boxes)):
+            continue
+
+        if (seen[key]):
+            continue
+
+        seen[key] = True
+        useDFS(boxes, seen, key)
