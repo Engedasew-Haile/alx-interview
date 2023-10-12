@@ -16,6 +16,12 @@ Number of operations: 6
 
 
 def minOperations(n):
+    """
+    Computes the fewest number of operations needed to result
+    in exactly n 'H' characters.
+    :param n: target number of 'H' characters.
+    :return: minimum number 
+    """
     if not isinstance(n, int):
         return 0
     operation_count = 0
