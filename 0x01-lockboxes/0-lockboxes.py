@@ -40,7 +40,6 @@ def canUnlockAll(boxes):
     # task we only need to know if any node was unreached, which is easier.
     return all(seen)
 
-
 def useBFS(boxes, seen):
     """uses iteration to visit nodes breadth-first
         and populate the seen array as each new node is visited.
@@ -61,7 +60,6 @@ def useBFS(boxes, seen):
                 continue
 
             seen[key] = True
-
 
 def useDFS(boxes, seen, currentBoxIdx):
     """uses recursion to visit nodes depth-first
